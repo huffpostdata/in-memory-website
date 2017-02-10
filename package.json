@@ -1,0 +1,27 @@
+{
+  "name": "in-memory-website",
+  "version": "0.0.1",
+  "description": "Holds a static website in memory",
+  "main": "index.js",
+  "scripts": {
+    "rebuild-protobuf": "pbjs -t static-module --es6 -w commonjs lib/protobuf.proto > lib/protobuf.js",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huffpostdata/in-memory-website.git"
+  },
+  "author": "Adam Hooper <adam.hooper@huffingtonpost.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/huffpostdata/in-memory-website/issues"
+  },
+  "homepage": "https://github.com/huffpostdata/in-memory-website#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "protobufjs": "^6.6.3"
+  }
+}
