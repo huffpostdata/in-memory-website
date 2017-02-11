@@ -9,27 +9,27 @@ function stubServer(endpoints, options) {
 }
 
 describe('StubServer', () => {
-  it('should get() a valid key', () => {
-    const endpoint = { key: '/foo', headers: {}, body: Buffer.from('bar') }
+  it('should get() a valid path', () => {
+    const endpoint = { path: '/foo', headers: {}, body: Buffer.from('bar') }
     const server = stubServer([
-      { key: '/not-foo', headers: {}, body: 'no' },
+      { path: '/not-foo', headers: {}, body: 'no' },
       endpoint,
-      { key: '/also-not-foo', headers: {}, body: 'no' }
+      { path: '/also-not-foo', headers: {}, body: 'no' }
     ])
     expect(server.get('/foo')).to.deep.eq(endpoint)
   })
 
-  it('should return null on invalid key', () => {
+  it('should return null on invalid path', () => {
     const server = stubServer([
-      { key: '/foo', headers: {}, body: 'no' }
+      { path: '/foo', headers: {}, body: 'no' }
     ])
     expect(server.get('bar')).to.eq(null)
   })
 
   it('should render404()', () => {
     const server = stubServer([
-      { key: '/foo', headers: {}, body: 'hi' },
-      { key: '/bar', headers: {}, body: 'bye' }
+      { path: '/foo', headers: {}, body: 'hi' },
+      { path: '/bar', headers: {}, body: 'bye' }
     ])
     const html = server.render404HtmlString()
     expect(html).to.contain('<a href="/foo"')

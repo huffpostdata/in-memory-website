@@ -4,6 +4,7 @@ module.exports = {
   StaticEndpoint: require('./lib/StaticEndpoint'),
   StaticWebsite: require('./lib/StaticWebsite'),
   StubServer: require('./lib/StubServer'),
-  AwsUploader: require('./lib/AwsUploader'),
+  DevServer: require('./lib/DevServer'),
+  S3Uploader: require('./lib/S3Uploader'),
   validate: require('./lib/validate')
 }

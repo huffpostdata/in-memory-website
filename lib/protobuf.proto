@@ -7,7 +7,7 @@ syntax = "proto3";
 // https://developers.google.com/protocol-buffers/docs/proto3
 
 message StaticEndpoint {
-  string key = 1;
+  string path = 1;
   map<string, string> headers = 2;
   bytes body = 3;
 }

@@ -19,9 +19,12 @@
   "homepage": "https://github.com/huffpostdata/in-memory-website#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "chokidar": "^1.6.1",
     "mocha": "^3.2.0"
   },
   "dependencies": {
-    "protobufjs": "^6.6.3"
+    "escape-html": "^1.0.3",
+    "protobufjs": "^6.6.3",
+    "ws": "^2.0.3"
   }
 }

@@ -21,7 +21,8 @@ How do you take advantage? Use a framework that outputs a "static website" in
 this format. This package provides the tools to develop and deploy within
 milliseconds.
 
-# Usage
+Usage
+=====
 
 First, `npm install --save in-memory-website`
 
@@ -72,12 +73,28 @@ scripts:
 **1. build.js: builds a website; outputs to stdout**
 
 ```
-const StaticWebsite = require('in-memory-website').StaticWebsite
+#!/usr/bin/env node
+'use strict'
 
+const StaticWebsite = require('in-memory-server').StaticWebsite
+const validate = require('in-memory-server').validate
+
+// Normally our website generator would be more complex. Potentially it will
+// be asynchronous. It may throw an error. Make this script exit with a
+// non-zero error code if there's a problem.
 const website = new StaticWebsite([
   { path: '/hello-world', headers: { 'Content-Type': 'text/plain; charset=utf-8' }, body: Buffer.from('Hello, World!') }
 ])
-process.stdout.write(website)
+
+// We have utilities to avoid common mistakes. Choose the mistakes you want
+// to avoid; make this script exit with a non-zero error code if there's a
+// problem.
+const validationError = validate.headersAreUseful(website)
+if (validationError) throw validationError
+
+// No problem? Write the website to stdout and exit with a zero error code
+// (the default).
+process.stdout.write(website.toBuffer())
 ```
 
 This is your framework: the program that builds your entire website. It outputs
@@ -88,12 +105,20 @@ the website to `process.stdout` and exits with status code `0`. If it fails
 **2. dev.js: serves a website; rebuilds automatically**
 
 ```
-const DevServer = require('in-memory-website').DevServer
-const server = new DevServer(`${__dirname}/build.js`, 3000)
+#!/usr/bin/env node
+'use strict'
+
+const DevServer = require('in-memory-server').DevServer
+
+const server = new DevServer(`${__dirname}/build.js`)
+server.listen(3000, err => {
+  if (err) throw err
+  console.log('Listening at http://localhost:3000')
+})
 
 // In this dev environment, let's rebuild the website every time a file changes
 const chokidar = require('chokidar') // https://github.com/paulmillr/chokidar
-chokidar.watch([ 'src' ])
+chokidar.watch([ 'test/readme/build.js' ])
   .on('change', () => server.queueBuild())
   .on('add', () => server.queueBuild())
   .on('unlink', () => server.queueBuild())
@@ -121,6 +146,9 @@ while you work. It's a web server, at
 **3. deploy.js: sends a website to a production server**
 
 ```
+#!/usr/bin/env node
+'use strict'
+
 const child_process = require('child_process')
 const StaticWebsite = require('in-memory-website').StaticWebsite
 const S3Uploader = require('in-memory-website').S3Uploader
@@ -136,3 +164,10 @@ S3Uploader.uploadWebsiteToBucket(website, 'my-bucket', {}, err => {
 
 [Hosting on S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)
 is cheap and fast. TODO add tutorial.
+
+License
+=======
+
+MIT
+
+TODO include license text
