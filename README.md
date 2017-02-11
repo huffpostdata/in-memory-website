@@ -28,7 +28,7 @@ First, `npm install --save in-memory-website`
 
 Now, build your in-memory website. It can be as simple as this, `my-website.js`:
 
-```
+```javascript
 'use strict'
 
 const StaticWebsite = require('in-memory-website').StaticWebsite
@@ -45,7 +45,7 @@ Now you can serve the website locally. The 404 error page is a directory
 listing, and any response with a `Location` header becomes a
 `301 Moved Permanently`.
 
-```
+```javascript
 // ... continuing above program
 const HttpServer = require('in-memory-website').HttpServer
 const server = new HttpServer(website)
@@ -56,7 +56,7 @@ server.listen(3000) // and browse to http://localhost:3000
 
 You can dump the website to a file, and then reload it later:
 
-```
+```javascript
 // ... continuing above program
 const fs = require('fs')
 fs.writeFileSync('my-website.bin', website.toBuffer())
@@ -72,7 +72,7 @@ scripts:
 
 **1. build.js: builds a website; outputs to stdout**
 
-```
+```javascript
 #!/usr/bin/env node
 'use strict'
 
@@ -104,7 +104,7 @@ the website to `process.stdout` and exits with status code `0`. If it fails
 
 **2. dev.js: serves a website; rebuilds automatically**
 
-```
+```javascript
 #!/usr/bin/env node
 'use strict'
 
@@ -118,7 +118,7 @@ server.listen(3000, err => {
 
 // In this dev environment, let's rebuild the website every time a file changes
 const chokidar = require('chokidar') // https://github.com/paulmillr/chokidar
-chokidar.watch([ 'test/readme/build.js' ])
+chokidar.watch([ 'src' ])
   .on('change', () => server.queueBuild())
   .on('add', () => server.queueBuild())
   .on('unlink', () => server.queueBuild())
@@ -145,7 +145,7 @@ while you work. It's a web server, at
 
 **3. deploy.js: sends a website to a production server**
 
-```
+```javascript
 #!/usr/bin/env node
 'use strict'
 
