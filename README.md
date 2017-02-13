@@ -1,21 +1,21 @@
-A static website. In memory. Which is great for uploading to S3.
+A static website. In memory. You can save your website to a file, serve it, or
+upload it to S3.
 
 What's a "static" website? "Static" means this:
 
 * Only GET and HEAD requests are valid.
 * The response for a given endpoint never changes.
 * There are no errors. (A _server_ may return 404 errors, and a _server_ may
-  receive erroneous HTTP requests; but those aren't errors in the website.)
+  receive erroneous HTTP requests; but those aren't _website_ errors.)
 
-Why "in memory"? Because the filesystem is a bad place to store a website, for
-many reasons:
+Why "in memory"? Because it's crazy-fast for small websites. And it's better
+than storing the website as a bunch of files:
 
 * A website doesn't have "folders": it has "paths". `/foo` can be an HTML file,
   and `/foo/bar` can also be an HTML file. See? `/foo` is not a folder.
 * A website doesn't just return file contents: it also returns HTTP headers.
-  Those headers aren't derived from the file contents. They're separate.
+  Those headers aren't derived from the file contents.
 * A website can have redirects.
-* Filesystems are slow.
 
 How do you take advantage? Use a framework that outputs a "static website" in
 this format. This package provides the tools to develop and deploy within
@@ -47,7 +47,7 @@ listing, and any response with a `Location` header becomes a
 
 ```javascript
 // ... continuing above program
-const HttpServer = require('in-memory-website').HttpServer
+const DevServer = require('in-memory-website').HttpServer
 const server = new HttpServer(website)
 server.listen(3000) // and browse to http://localhost:3000
 ```
@@ -83,7 +83,11 @@ const validate = require('in-memory-server').validate
 // be asynchronous. It may throw an error. Make this script exit with a
 // non-zero error code if there's a problem.
 const website = new StaticWebsite([
-  { path: '/hello-world', headers: { 'Content-Type': 'text/plain; charset=utf-8' }, body: Buffer.from('Hello, World!') }
+  {
+    path: '/hello-world',
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+    body: Buffer.from('Hello, World!')
+  }
 ])
 
 // We have utilities to avoid common mistakes. Choose the mistakes you want
@@ -111,10 +115,6 @@ the website to `process.stdout` and exits with status code `0`. If it fails
 const DevServer = require('in-memory-server').DevServer
 
 const server = new DevServer(`${__dirname}/build.js`)
-server.listen(3000, err => {
-  if (err) throw err
-  console.log('Listening at http://localhost:3000')
-})
 
 // In this dev environment, let's rebuild the website every time a file changes
 const chokidar = require('chokidar') // https://github.com/paulmillr/chokidar
@@ -124,6 +124,11 @@ chokidar.watch([ 'src' ])
   .on('unlink', () => server.queueBuild())
   // queueBuild() is "debounced": if 10 files change very quickly, we only
   // rebuild once.
+
+server.listen(3000, err => {
+  if (err) throw err
+  console.log('Listening at http://localhost:3000')
+})
 
 server.listenForLiveReload() // and use http://livereload.com/extensions/
 ```
@@ -135,13 +140,12 @@ while you work. It's a web server, at
 * Its "404 Not Found" page links to all the valid endpoints
 * When `build.js` returns a status code that isn't `0`, every endpoint is a
   `500 Internal Server Error` with debugging information.
-* When rebuilding (i.e., after `queueBuild()` is called but before the build
-  completes), it queues HTTP requests; those HTTP requests will complete when
-  the build completes.
+* It queues HTTP requests while rebuilding; those HTTP requests will complete
+  when the build finishes.
 * If you use a [LiveReload browser extension](http://livereload.com/extensions/)
   the page will refresh whenever you change a file. That means you'll see the
   results of your code changes immediately -- be they error messages or
-  beautiful bugfixes.
+  bugfixes.
 
 **3. deploy.js: sends a website to a production server**
 
