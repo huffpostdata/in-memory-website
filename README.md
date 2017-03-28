@@ -172,6 +172,5 @@ is cheap and fast. TODO add tutorial.
 License
 =======
 
-MIT
-
-TODO include license text
+Copyright (c) 2017 The Huffington Post, released under the MIT license.
+See LICENSE.
