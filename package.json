@@ -1,10 +1,10 @@
 {
   "name": "in-memory-website",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Holds a static website in memory",
   "main": "index.js",
   "scripts": {
-    "rebuild-protobuf": "pbjs -t static-module --es6 -w commonjs lib/protobuf.proto > lib/protobuf.js",
+    "rebuild-protobuf": "pbjs -t static-module -w commonjs lib/protobuf.proto > lib/protobuf.js",
     "test": "mocha"
   },
   "repository": {
