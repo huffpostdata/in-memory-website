@@ -166,8 +166,32 @@ S3Uploader.uploadWebsiteToBucket(website, 'my-bucket', {}, err => {
 })
 ```
 
+### Lightning-fast production server
+
 [Hosting on S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)
 is cheap and fast. TODO add tutorial.
+
+### Backup production server
+
+We supply [Express](https://expressjs.com) middleware to help you build your
+own web server. For instance:
+
+```javascript
+#!/usr/bin/env node
+'use strict'
+
+const express = require('express')
+const StaticWebsite = require('in-memory-website').StaticWebsite
+const ExpressApp = require('in-memory-website').ExpressApp
+
+const websiteData = require('fs').readFileSync('websiteDumpedSomewhere.data')
+const website = StaticWebsite.fromBuffer(websiteData)
+
+const app = express()
+app.use(ExpressApp(website))
+
+app.listen(3000, () => { console.log('Listening at http://localhost:3000') })
+```
 
 License
 =======
