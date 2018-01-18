@@ -1,6 +1,6 @@
 {
   "name": "in-memory-website",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Holds a static website in memory",
   "main": "index.js",
   "scripts": {
