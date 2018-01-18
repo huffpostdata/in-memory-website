@@ -1,0 +1,17 @@
+syntax = "proto3";
+package staticwebsite;
+
+// Transfer encoding for StaticWebsite objects. Helps send an entire memory
+// dump between processes.
+//
+// https://developers.google.com/protocol-buffers/docs/proto3
+
+message StaticEndpoint {
+  string path = 1;
+  map<string, string> headers = 2;
+  bytes body = 3;
+}
+
+message StaticWebsite {
+  repeated StaticEndpoint endpoints = 1;
+}
