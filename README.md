@@ -171,6 +171,9 @@ S3Uploader.uploadWebsiteToBucket(website, 'my-bucket', {}, err => {
 [Hosting on S3](http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html)
 is cheap and fast. TODO add tutorial.
 
+Alternatively, if you use Docker, you can easily build a standalone web
+server based on `./tools/http-server`.
+
 ### Backup production server
 
 We supply [Express](https://expressjs.com) middleware to help you build your
